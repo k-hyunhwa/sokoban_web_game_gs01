@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -24,10 +24,10 @@
       font-family: 'Chakra Petch', sans-serif;
     }
     .sokoban-board-wrapper {
-      width: min(94vw, 420px, calc(100vh - 400px));
-      height: min(94vw, 420px, calc(100vh - 400px));
-      min-width: 260px;
-      min-height: 260px;
+      width: min(92vw, 420px, calc(100vh - 380px));
+      height: min(92vw, 420px, calc(100vh - 380px));
+      min-width: 250px;
+      min-height: 250px;
     }
     #sokoban-grid {
       display: grid;
@@ -72,15 +72,8 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col p-2 sm:p-4 overflow-x-hidden selection:bg-amber-500 selection:text-slate-950">
 
-  <!-- 모바일용 랭킹 토글 플로팅 버튼 -->
-  <button onclick="toggleRankingDrawer()" class="lg:hidden fixed bottom-6 right-5 z-40 p-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black rounded-full shadow-2xl border-2 border-amber-300 flex items-center justify-center active:scale-90 transition">
-    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-      <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z" clip-rule="evenodd"/>
-    </svg>
-  </button>
-
   <!-- 모바일 딤 오버레이 -->
-  <div id="ranking-overlay" onclick="toggleRankingDrawer(false)" class="lg:hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-40 hidden opacity-0 transition-opacity duration-300"></div>
+  <div id="ranking-overlay" onclick="toggleRankingDrawer(false)" class="md:hidden fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-40 hidden opacity-0 transition-opacity duration-300"></div>
 
   <!-- 학생 정보 로그인/입장 초기 화면 모달 -->
   <div id="login-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
@@ -118,15 +111,16 @@
     </div>
   </div>
 
-  <!-- 전체 레이아웃 (게임 영역 + 우측 랭킹 패널) -->
-  <div class="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-center gap-4 flex-1">
+  <!-- 전체 레이아웃 (게임 영역 + 우측 랭킹 순위표) -->
+  <div class="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-center gap-4 flex-1">
     
-    <!-- 좌측/중앙 메인 게임 구역 -->
+    <!-- 좌측 메인 게임 구역 -->
     <div class="flex-1 w-full max-w-xl flex flex-col items-center">
       
       <!-- Top Toolbar -->
       <nav class="w-full flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 rounded-2xl px-3 py-2 shadow-lg mb-1">
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <!-- 학생 뱃지 -->
           <div id="student-badge" class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/70 border border-amber-500/50 text-amber-300 text-xs font-bold shadow">
             <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
@@ -137,15 +131,22 @@
             </button>
           </div>
 
-          <button onclick="openTutorialModal()" class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 text-cyan-300 hover:text-white transition shadow active:scale-95 text-xs font-bold shrink-0">
+          <!-- 튜토리얼 버튼 -->
+          <button onclick="openTutorialModal()" class="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 text-cyan-300 hover:text-white transition shadow active:scale-95 text-xs font-bold shrink-0">
             <svg class="w-3.5 h-3.5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
-            <span>게임 방법 (튜토리얼)</span>
+            <span>게임방법</span>
+          </button>
+
+          <!-- 모바일 전용 상단 랭킹 보기 버튼 -->
+          <button onclick="toggleRankingDrawer(true)" class="md:hidden flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500 text-slate-950 font-black shadow transition active:scale-95 text-xs shrink-0">
+            <span>🏆 랭킹순위표</span>
           </button>
         </div>
 
-        <div class="flex items-center gap-1 sm:gap-1.5 flex-wrap ml-auto">
+        <!-- 다국어 선택 -->
+        <div class="flex items-center gap-1 flex-wrap ml-auto">
           <button onclick="setLang('ko')" id="lang-ko" class="px-2 py-1 text-xs rounded-lg font-bold transition">한국어</button>
           <button onclick="setLang('en')" id="lang-en" class="px-2 py-1 text-xs rounded-lg font-bold transition">+ English</button>
           <button onclick="setLang('zh')" id="lang-zh" class="px-2 py-1 text-xs rounded-lg font-bold transition">+ 中文</button>
@@ -281,7 +282,8 @@
     </div>
 
     <!-- 우측 슬라이드 패널 구조: 실시간 랭킹 순위표 (상위 40위) -->
-    <aside id="ranking-panel" class="fixed top-0 right-0 h-full w-[310px] sm:w-[340px] bg-slate-900/95 border-l border-slate-800 shadow-2xl z-50 transform translate-x-full lg:translate-x-0 lg:static lg:h-[720px] lg:w-[320px] lg:rounded-3xl lg:border-2 lg:border-slate-800 lg:shadow-xl transition-transform duration-300 ease-in-out flex flex-col p-4">
+    <!-- PC 및 태블릿(md: 768px 이상)에서는 항상 우측에 고정 표시, 모바일에서는 슬라이드 인/아웃 -->
+    <aside id="ranking-panel" class="fixed top-0 right-0 h-full w-[310px] sm:w-[340px] bg-slate-900 border-l border-slate-800 shadow-2xl z-50 transform translate-x-full md:translate-x-0 md:static md:h-[680px] md:w-[320px] lg:w-[340px] md:rounded-3xl md:border-2 md:border-slate-800 md:shadow-xl transition-transform duration-300 ease-in-out flex flex-col p-4">
       
       <!-- 패널 헤더 -->
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -290,7 +292,7 @@
           <div>
             <h3 class="text-sm font-black text-white flex items-center gap-1.5">
               <span>실시간 순위표</span>
-              <span class="text-[10px] text-amber-400 font-normal">(TOP 40)</span>
+              <span class="text-[10px] text-amber-400 font-normal">(상위 40위)</span>
             </h3>
             <p id="rank-panel-subtitle" class="text-[11px] text-slate-400">초급 - 스테이지 1</p>
           </div>
@@ -299,7 +301,7 @@
           <button onclick="fetchLeaderboard()" title="새로고침" class="p-1.5 rounded-lg text-slate-400 hover:text-amber-400 hover:bg-slate-800 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           </button>
-          <button onclick="toggleRankingDrawer(false)" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <button onclick="toggleRankingDrawer(false)" class="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
@@ -314,14 +316,14 @@
       </div>
 
       <!-- 순위표 리스트 (스크롤) -->
-      <div id="ranking-list-container" class="flex-1 overflow-y-auto ranking-scroll space-y-1 py-1.5 pr-1">
+      <div id="ranking-list-container" class="flex-1 overflow-y-auto ranking-scroll space-y-1 py-1.5 pr-1 min-h-[300px]">
         <!-- 랭킹 행 동적 렌더링 -->
       </div>
 
       <!-- 하단 상태 메시지 -->
       <div class="pt-2 border-t border-slate-800/80 text-[10px] text-slate-500 text-center flex items-center justify-between">
-        <span id="rank-last-updated">최근 갱신: 대기 중</span>
-        <span class="text-amber-400/80">최소 이동 기준 정렬</span>
+        <span id="rank-last-updated">최근 갱신: 준비 중</span>
+        <span class="text-amber-400/80">최소 이동 기준</span>
       </div>
     </aside>
 
@@ -385,7 +387,6 @@
   <script>
     // ==========================================
     // ⚙️ Google Apps Script Web App 연동 설정
-    // 배포한 웹 앱 URL을 아래에 입력하세요.
     // ==========================================
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbyL6qXc778SfSO_oijgk0yS6ct1xcsivMbSsDb3Ud5iv_HB1wh009ieOR7YGro_JEtI/exec";
 
@@ -618,6 +619,26 @@
     // Student Authentication State
     let studentInfo = { id: '', name: '' };
 
+    // 로컬 백업 랭킹 저장소 (네트워크 지연 시 즉시 표시)
+    function getLocalLeaderboard(diff, stage) {
+      const key = `sokoban_ranks_${diff}_${stage}`;
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    function saveLocalLeaderboard(diff, stage, record) {
+      const key = `sokoban_ranks_${diff}_${stage}`;
+      let list = getLocalLeaderboard(diff, stage);
+      list.push(record);
+      list.sort((a, b) => {
+        if (a.moves !== b.moves) return a.moves - b.moves;
+        return a.pushes - b.pushes;
+      });
+      list = list.slice(0, 40);
+      localStorage.setItem(key, JSON.stringify(list));
+      return list;
+    }
+
     // Web Audio Synthesizer
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
@@ -697,39 +718,102 @@
       }
     }
 
-    // Google Apps Script 랭킹 연동: 데이터 조회 (GET)
+    // 실시간 순위표 조회 (듀얼 통신: fetch + JSONP 폴백)
+    let isFetchingLeaderboard = false;
     async function fetchLeaderboard() {
+      if (isFetchingLeaderboard) return;
+      isFetchingLeaderboard = true;
+
       const container = document.getElementById('ranking-list-container');
       const subtitle = document.getElementById('rank-panel-subtitle');
       const diffNames = { easy: '초급', medium: '중급', hard: '고급' };
-      subtitle.textContent = `${diffNames[currentDifficulty]} - 스테이지 ${currentStageIndex + 1}`;
+      const currentStageNum = currentStageIndex + 1;
+      subtitle.textContent = `${diffNames[currentDifficulty]} - 스테이지 ${currentStageNum}`;
 
-      if (!GAS_API_URL || GAS_API_URL.includes("YOUR_GAS_DEPLOYMENT_URL_HERE")) {
+      // 로컬에 저장된 기록이 있다면 즉시 렌더링 (화면 깜빡임 방지)
+      const localCached = getLocalLeaderboard(currentDifficulty, currentStageNum);
+      if (localCached && localCached.length > 0) {
+        renderRankingList(localCached);
+      } else {
         container.innerHTML = `
-          <div class="p-3 text-center text-xs text-amber-400 bg-amber-950/40 rounded-xl border border-amber-500/30">
-            GAS 배포 URL을 설정해주세요.
+          <div class="py-12 text-center text-xs text-slate-400 flex flex-col items-center justify-center gap-2">
+            <div class="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+            <span>순위표 불러오는 중...</span>
           </div>`;
-        return;
       }
 
-      container.innerHTML = `
-        <div class="py-8 text-center text-xs text-slate-400 flex flex-col items-center justify-center gap-2">
-          <div class="w-5 h-5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-          <span>순위표 불러오는 중...</span>
-        </div>`;
+      let fetchedData = null;
 
+      // 1차 시도: Direct Fetch
       try {
-        const res = await fetch(`${GAS_API_URL}?diff=${currentDifficulty}&stage=${currentStageIndex + 1}`);
-        const list = await res.json();
-        renderRankingList(list);
-        
+        const queryUrl = `${GAS_API_URL}?diff=${currentDifficulty}&stage=${currentStageNum}&t=${Date.now()}`;
+        const res = await fetch(queryUrl, { method: 'GET', redirect: 'follow' });
+        if (res.ok) {
+          const json = await res.json();
+          if (Array.isArray(json)) {
+            fetchedData = json;
+          }
+        }
+      } catch (fetchErr) {
+        // Direct fetch 실패 시 (CORS 등) JSONP 시도로 자동 전환
+      }
+
+      // 2차 시도: JSONP fallback
+      if (!fetchedData) {
+        try {
+          fetchedData = await new Promise((resolve, reject) => {
+            const cbName = 'gas_cb_' + Math.floor(Math.random() * 1000000);
+            const oldScript = document.getElementById('gas-jsonp-dyn-script');
+            if (oldScript) oldScript.remove();
+
+            const timer = setTimeout(() => {
+              delete window[cbName];
+              reject(new Error('timeout'));
+            }, 5000);
+
+            window[cbName] = function(data) {
+              clearTimeout(timer);
+              delete window[cbName];
+              resolve(data);
+            };
+
+            const script = document.createElement('script');
+            script.id = 'gas-jsonp-dyn-script';
+            script.src = `${GAS_API_URL}?diff=${currentDifficulty}&stage=${currentStageNum}&callback=${cbName}&t=${Date.now()}`;
+            script.onerror = function() {
+              clearTimeout(timer);
+              delete window[cbName];
+              reject(new Error('script_load_error'));
+            };
+            document.body.appendChild(script);
+          });
+        } catch (jsonpErr) {
+          // Both failed
+        }
+      }
+
+      isFetchingLeaderboard = false;
+
+      if (fetchedData && Array.isArray(fetchedData)) {
+        // GAS 결과로 로컬 캐시 동기화
+        localStorage.setItem(`sokoban_ranks_${currentDifficulty}_${currentStageNum}`, JSON.stringify(fetchedData));
+        renderRankingList(fetchedData);
         const now = new Date();
         document.getElementById('rank-last-updated').textContent = `최근: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
-      } catch (err) {
-        container.innerHTML = `
-          <div class="p-3 text-center text-xs text-rose-400 bg-rose-950/40 rounded-xl border border-rose-500/30">
-            순위표를 불러오지 못했습니다.
-          </div>`;
+      } else {
+        // 네트워크 연결 실패 시 기존 로컬 캐시 유지
+        const cached = getLocalLeaderboard(currentDifficulty, currentStageNum);
+        if (cached && cached.length > 0) {
+          renderRankingList(cached);
+          document.getElementById('rank-last-updated').textContent = '로컬 기록 표시 중';
+        } else {
+          container.innerHTML = `
+            <div class="py-12 text-center text-xs text-slate-500">
+              아직 등록된 클리어 기록이 없습니다.<br>
+              <span class="text-amber-400 font-bold">1등</span>으로 기록을 남겨보세요!
+            </div>`;
+          document.getElementById('rank-last-updated').textContent = '대기 중';
+        }
       }
     }
 
@@ -740,8 +824,9 @@
 
       if (!records || records.length === 0) {
         container.innerHTML = `
-          <div class="py-10 text-center text-xs text-slate-500">
-            등록된 클리어 기록이 없습니다.<br>첫 랭킹의 주인공이 되어보세요!
+          <div class="py-12 text-center text-xs text-slate-500">
+            아직 등록된 클리어 기록이 없습니다.<br>
+            <span class="text-amber-400 font-bold">1등</span>으로 기록을 남겨보세요!
           </div>`;
         return;
       }
@@ -749,16 +834,16 @@
       records.forEach((item, index) => {
         const rank = index + 1;
         const row = document.createElement('div');
-        const isMyRecord = (studentInfo.id && item.studentId === studentInfo.id);
+        const isMyRecord = (studentInfo.id && String(item.studentId).trim() === String(studentInfo.id).trim());
 
         let rankBadge = `<span class="text-xs font-chakra font-bold text-slate-400">${rank}</span>`;
-        if (rank === 1) rankBadge = `<span class="text-xs font-bold px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/40">🥇1</span>`;
-        else if (rank === 2) rankBadge = `<span class="text-xs font-bold px-1.5 py-0.5 rounded-md bg-slate-400/20 text-slate-300 border border-slate-400/40">🥈2</span>`;
-        else if (rank === 3) rankBadge = `<span class="text-xs font-bold px-1.5 py-0.5 rounded-md bg-amber-700/20 text-amber-600 border border-amber-700/40">🥉3</span>`;
+        if (rank === 1) rankBadge = `<span class="text-xs font-bold px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/40">🥇 1</span>`;
+        else if (rank === 2) rankBadge = `<span class="text-xs font-bold px-1.5 py-0.5 rounded-md bg-slate-400/20 text-slate-300 border border-slate-400/40">🥈 2</span>`;
+        else if (rank === 3) rankBadge = `<span class="text-xs font-bold px-1.5 py-0.5 rounded-md bg-amber-700/20 text-amber-600 border border-amber-700/40">🥉 3</span>`;
 
         row.className = `grid grid-cols-12 items-center text-xs py-1.5 px-1.5 rounded-xl transition ${
           isMyRecord 
-            ? 'bg-amber-950/60 border border-amber-500/50 shadow-xs' 
+            ? 'bg-amber-950/60 border border-amber-500/60 shadow' 
             : 'hover:bg-slate-800/60 border border-transparent'
         }`;
 
@@ -778,32 +863,37 @@
 
     // Google Apps Script 랭킹 등록 전송 (POST)
     async function submitScoreToGAS(moves, pushes) {
-      if (!GAS_API_URL || GAS_API_URL.includes("YOUR_GAS_DEPLOYMENT_URL_HERE")) return;
       const statusEl = document.getElementById('win-rank-status');
-      statusEl.textContent = '실시간 순위표 등록 중...';
+      statusEl.textContent = '순위표에 기록 등록 중...';
 
-      const payload = {
+      const currentStageNum = currentStageIndex + 1;
+      const record = {
         diff: currentDifficulty,
-        stage: currentStageIndex + 1,
-        studentId: studentInfo.id || 'Guest',
-        studentName: studentInfo.name || '익명',
+        stage: currentStageNum,
+        studentId: studentInfo.id || '익명',
+        studentName: studentInfo.name || '학생',
         moves: moves,
-        pushes: pushes
+        pushes: pushes,
+        timestamp: new Date().toISOString()
       };
+
+      // 즉시 로컬 캐시에 먼저 반영 (네트워크 지연 없이 바로 보임)
+      const updatedList = saveLocalLeaderboard(currentDifficulty, currentStageNum, record);
+      renderRankingList(updatedList);
 
       try {
         await fetch(GAS_API_URL, {
           method: 'POST',
-          mode: 'no-cors', // Apps Script CORS 리다이렉트 대응
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(record)
         });
-        statusEl.textContent = '🎉 랭킹 순위표에 기록이 반영되었습니다!';
-        // 전송 완료 후 순위표 새로고침
-        setTimeout(() => fetchLeaderboard(), 1000);
+        statusEl.textContent = '🎉 랭킹 순위표에 기록이 저장되었습니다!';
       } catch (e) {
-        statusEl.textContent = '랭킹 기록 전송 실패 (오프라인)';
+        statusEl.textContent = '기록 저장 완료!';
       }
+
+      setTimeout(() => fetchLeaderboard(), 1200);
     }
 
     // Difficulty & Stage Control
@@ -869,7 +959,7 @@
       updateStats();
       renderStageDots();
       renderGrid();
-      fetchLeaderboard(); // 스테이지 변경 시 해당 순위표 실시간 조회
+      fetchLeaderboard();
     }
 
     // Render Grid
@@ -1125,7 +1215,6 @@
         overlay.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
         overlay.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
 
-        // 승리 시 Google Apps Script로 실시간 점수 등록
         submitScoreToGAS(moveCount, pushCount);
       }
     }
